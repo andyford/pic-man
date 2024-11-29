@@ -1,0 +1,147 @@
+<html>
+  <head>
+    <style>
+      #output {
+        display: block;
+        max-width: 100%;
+        max-height: calc(100vh - 2rem);
+      }
+      .controls {
+        display: flex;
+
+      }
+      label {
+        display: block;
+      }
+      .pic {
+        background: cyan;
+      }
+    </style>
+  </head>
+  <body>
+    <input id="image" type="file" accept="image/*" />
+
+    <div class="controls">
+      <div>
+        <label for="filter-grayscale">grayscale</label>
+        <input type="range" id="filter-grayscale" value="0" type="number" min="0" max="100">
+      </div>
+      <div>
+        <label for="filter-hue-rotate">hue rotate</label>
+        <input type="range" id="filter-hue-rotate" value="0" type="number" min="0" max="360">
+      </div>
+      <div>
+        <label for="filter-invert">invert</label>
+        <input type="range" id="filter-invert" value="0" type="number" min="0" max="100">
+      </div>
+      <div>
+        <label for="filter-sepia">sepia</label>
+        <input type="range" id="filter-sepia" value="0" type="number" min="0" max="100">
+      </div>
+      <div>
+        <label for="filter-saturate">saturate</label>
+        <input type="range" id="filter-saturate" value="100" type="number" min="0" max="500" list="filter-saturate-ticks">
+        <datalist id="filter-saturate-ticks">
+          <option value="100">
+        </datalist>
+      </div>
+      <div>
+        <label for="filter-brightness">brightness</label>
+        <input type="range" id="filter-brightness" value="100" type="number" min="0" max="200" list="filter-brightness-ticks">
+        <datalist id="filter-brightness-ticks">
+          <option value="100">
+        </datalist>
+      </div>
+      <div>
+        <label for="filter-contrast">contrast</label>
+        <input type="range" id="filter-contrast" value="100" type="number" min="0" max="1000" list="filter-contrast-ticks">
+        <datalist id="filter-contrast-ticks">
+          <option value="100">
+        </datalist>
+      </div>
+    </div>
+
+    <div class="pic">
+      <img id="output">
+    </div>
+
+    <script>
+      var vals = {
+        grayscale: 0,
+        hueRotate: 0,
+        invert: 0,
+        sepia: 0,
+        saturate: '100%',
+        brightness: '100%',
+        contrast: '100%'
+      };
+
+      function updateVals() {
+        document.querySelector("#output").style.filter = `
+          grayscale(${vals.grayscale})
+          hue-rotate(${vals.hueRotate})
+          invert(${vals.invert})
+          sepia(${vals.sepia})
+          saturate(${vals.saturate})
+          brightness(${vals.brightness})
+          contrast(${vals.contrast})
+        `;
+      }
+
+      function handleFileInput(event) {
+        event.preventDefault();
+
+        // Get image
+        const image = event.target.files[0];
+        // Create blob url and set src
+        document.querySelector("#output").src = URL.createObjectURL(image);
+      }
+
+      function handleGrayscaleChange(event) {
+        vals.grayscale = event.target.value * .01;
+        updateVals();
+      }
+
+      function handleHueRotateChange(event) {
+        vals.hueRotate = `${event.target.value}deg`;
+        updateVals();
+      }
+
+      function handleInvertChange(event) {
+        vals.invert = event.target.value * .01;
+        updateVals();
+      }
+
+      function handleSepiaChange(event) {
+        vals.sepia = event.target.value * .01;
+        updateVals();
+      }
+
+      function handleSaturateChange(event) {
+        vals.saturate = `${event.target.value}%`;
+        updateVals();
+      }
+
+      function handleBrightnessChange(event) {
+        vals.brightness = `${event.target.value}%`;
+        updateVals();
+      }
+
+      function handleContrastChange(event) {
+        vals.contrast = `${event.target.value}%`;
+        updateVals();
+      }
+
+      // bind events
+      document.querySelector("#image").addEventListener("input", handleFileInput);
+
+      document.querySelector("#filter-grayscale").addEventListener("input", handleGrayscaleChange);
+      document.querySelector("#filter-hue-rotate").addEventListener("input", handleHueRotateChange);
+      document.querySelector("#filter-invert").addEventListener("input", handleInvertChange);
+      document.querySelector("#filter-sepia").addEventListener("input", handleSepiaChange);
+      document.querySelector("#filter-saturate").addEventListener("input", handleSaturateChange);
+      document.querySelector("#filter-brightness").addEventListener("input", handleBrightnessChange);
+      document.querySelector("#filter-contrast").addEventListener("input", handleContrastChange);
+    </script>
+  </body>
+</html>
